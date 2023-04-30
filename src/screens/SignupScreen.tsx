@@ -1,23 +1,30 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Dimensions, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-// import { Colors } from '../constants';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-// import { Routes } from '../routes/routes';
-// import { RouteProp, useRoute } from '@react-navigation/native';
-// import { RouteParams } from '../routes/types';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteParams } from '../routes/types';
+import { Routes } from '../routes/routes';
 
-// type RouteType = RouteProp<RouteParams, Routes.Login>;
+type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
-const LoginScreen: React.FC = () => {
+const SignupScreen: React.FC = () => {
+  const navigation = useNavigation<RoutePropType>();
   const [hidePassword, setHidePassword] = React.useState(true);
-  //   const route = useRoute<RouteType>();
 
   return (
-    // <KeyboardAwareScrollView style={styles.background}>
     <SafeAreaView style={styles.container}>
       <View style={styles.mainButtonsContainer}>
-        <Text style={styles.logo}>Log in</Text>
+        <Text style={styles.logo}>Sign up</Text>
+        <Text style={styles.logo}>and jump right in</Text>
+        <Text style={styles.subtitle}>We are pretty sure you will use this thing to become better and better every day</Text>
+        <TextInput
+          mode="outlined"
+          inputMode="text"
+          style={styles.input}
+          placeholder="Name"
+          outlineStyle={styles.inputField}
+        />
         <TextInput
           mode="outlined"
           inputMode="email"
@@ -33,15 +40,24 @@ const LoginScreen: React.FC = () => {
           secureTextEntry={hidePassword}
           right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
         />
-        <Button mode="contained" style={styles.button}>
-          Login
+        <Button mode="contained" 
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate(Routes.PersonalDetails);
+          }}
+        >
+          Register
         </Button>
       </View>
-      <Button mode="text" style={styles.button}>
-        Forgot password?
+      <Button mode="text" 
+        style={styles.button} 
+        onPress={() => {
+          navigation.navigate(Routes.Login);
+        }}
+      >
+        Got an account? Sign in!
       </Button>
     </SafeAreaView>
-    // </KeyboardAwareScrollView>
   );
 };
 
@@ -75,8 +91,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logo: {
-    fontSize: 30,
-    marginBottom: 20,
+    fontSize: 28,
+    marginHorizontal: '15%',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: 'gray',
+    marginBottom: '5%',
+    marginHorizontal: '20%',
+    textAlign: 'center',
   },
   button: {
     marginVertical: 20,
@@ -84,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignupScreen;
