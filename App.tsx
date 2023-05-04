@@ -13,6 +13,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouteParams } from './src/routes/types';
 import { Routes } from './src/routes/routes';
+import SignupScreen from './src/screens/SignupScreen1';
+import PersonalDetails from './src/screens/PersonalDetails1';
 
 const colors = {
   primary: '#5589f8',
@@ -46,6 +48,20 @@ export default function App() {
             <Stack.Screen
               name={Routes.Login}
               component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Signup1}
+              component={SignupScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.PersonalDetails}
+              component={PersonalDetails}
               options={{
                 headerShown: false,
               }}
