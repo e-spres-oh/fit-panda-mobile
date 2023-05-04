@@ -9,10 +9,13 @@ import {
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import React from 'react';
 import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import MetricsScreen from './src/screens/MetricsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouteParams } from './src/routes/types';
 import { Routes } from './src/routes/routes';
+import ActivityLevelScreen from './src/screens/ActivityLevelScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -44,8 +47,29 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name={Routes.Register}
+              component={RegisterScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
               name={Routes.Login}
               component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Metrics}
+              component={MetricsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.ActivityLevel}
+              component={ActivityLevelScreen}
               options={{
                 headerShown: false,
               }}

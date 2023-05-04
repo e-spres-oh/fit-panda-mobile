@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-type Props = {
+interface Props {
   title: string;
   initialCount: number;
-};
+}
 
 const Counter: React.FC<Props> = ({ title, initialCount }) => {
   const [count, setCount] = useState(initialCount);
