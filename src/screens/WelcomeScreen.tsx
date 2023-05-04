@@ -3,7 +3,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Image, View } from 'react-native';
 import { Button } from 'react-native-paper';
 // import { Colors } from '../constants';
-// import { RouteProp, useNavigation } from '@react-navigation/native';
+// import { RouteProp } from '@react-navigation/native';
 import { RouteParams } from '../routes/types';
 import { Routes } from '../routes/routes';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -16,7 +16,12 @@ const WelcomeScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Image source={require('../../assets/logo.png')} style={styles.logo} resizeMode="contain" />
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} mode="contained">
+        <Button style={styles.button} 
+        mode="contained"
+        onPress={() => {
+          navigation.navigate(Routes.Signup);
+        }}
+        >
           Sign up for free
         </Button>
         <Button
