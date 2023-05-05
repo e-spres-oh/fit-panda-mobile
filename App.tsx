@@ -9,10 +9,13 @@ import {
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import React from 'react';
 import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouteParams } from './src/routes/types';
 import { Routes } from './src/routes/routes';
+import PersonalDetails from './src/screens/PersonalDetails';
 
 const colors = {
   primary: '#5589f8',
@@ -49,6 +52,18 @@ export default function App() {
               options={{
                 headerShown: false,
               }}
+            />
+            <Stack.Screen
+            name={Routes.SignUp}
+            component={SignUpScreen}
+            options={{
+              headerShown: false,
+            }}
+            />
+            <Stack.Screen
+              name={Routes.Personal}
+              component={PersonalDetails}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>

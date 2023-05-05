@@ -16,7 +16,13 @@ const WelcomeScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Image source={require('../../assets/logo.png')} style={styles.logo} resizeMode="contain" />
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} mode="contained">
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => {
+            navigation.navigate(Routes.SignUp);
+          }}
+        >
           Sign up for free
         </Button>
         <Button
@@ -44,7 +50,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     height: '100%',
     width: '100%',
-    // backgroundColor: Colors.background,
   },
   buttonsContainer: {
     width: '80%',

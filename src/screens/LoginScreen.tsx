@@ -1,20 +1,17 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Dimensions, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-// import { Colors } from '../constants';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-// import { Routes } from '../routes/routes';
-// import { RouteProp, useRoute } from '@react-navigation/native';
-// import { RouteParams } from '../routes/types';
+import { Routes } from '../routes/routes';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteParams } from '../routes/types';
 
-// type RouteType = RouteProp<RouteParams, Routes.Login>;
+type RouteType = RouteProp<RouteParams, Routes.Login>;
 
 const LoginScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
-  //   const route = useRoute<RouteType>();
+  const route = useRoute<RouteType>();
 
   return (
-    // <KeyboardAwareScrollView style={styles.background}>
     <SafeAreaView style={styles.container}>
       <View style={styles.mainButtonsContainer}>
         <Text style={styles.logo}>Log in</Text>
@@ -41,17 +38,12 @@ const LoginScreen: React.FC = () => {
         Forgot password?
       </Button>
     </SafeAreaView>
-    // </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    // backgroundColor: Colors.background,
-  },
   inputField: {
     borderRadius: 5,
-    // backgroundColor: Colors.inputBackground,
     borderWidth: 0,
   },
   mainButtonsContainer: {
@@ -67,7 +59,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: Dimensions.get('window').height,
     width: '100%',
-    // backgroundColor: Colors.background,
   },
   input: {
     width: '90%',
