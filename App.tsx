@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import {
   DefaultTheme,
@@ -13,6 +13,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouteParams } from './src/routes/types';
 import { Routes } from './src/routes/routes';
+import SignUpScreen from './src/screens/SignUpScreen';
+import OnBoardingScreen from './src/screens/OnBoardingScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -46,6 +48,18 @@ export default function App() {
             <Stack.Screen
               name={Routes.Login}
               component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.SignUp}
+              component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={Routes.OnBoarding}
+              component={OnBoardingScreen}
               options={{
                 headerShown: false,
               }}
