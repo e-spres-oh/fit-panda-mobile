@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Button, ButtonProps} from 'react-native-paper';
+import { Button, ButtonProps } from 'react-native-paper';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 interface Props {
-    children: React.ReactNode
+    children: string
     onPress?: () => void
     customStyles?: StyleProp<ViewStyle>
     mode?: "text" | "outlined" | "contained" | "elevated" | "contained-tonal"
@@ -14,7 +14,8 @@ const CustomButton: React.FC<Props & ButtonProps> = ({ children, onPress, custom
         style={[styles.button, customStyles]}
         mode={mode}
         onPress={onPress}
-        labelStyle={[styles.labelStyle]}>
+        labelStyle={[styles.labelStyle]}
+    >
         {children}
     </Button>
 );

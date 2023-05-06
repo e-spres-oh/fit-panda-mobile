@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 
 interface Props {
     customStyles?: StyleProp<ViewStyle>
-    children?: React.ReactNode
+    children?: string
 }
 
 const Subtitle: React.FC<Props> = ({ customStyles, children }) => {
