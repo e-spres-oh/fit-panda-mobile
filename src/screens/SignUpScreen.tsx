@@ -1,67 +1,97 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import * as React from 'react';
 import { SafeAreaView, StyleSheet, Dimensions, View } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { RouteParams } from '../routes/types';
 import { Routes } from '../routes/routes';
+
+import CustomButton from '../components/TextButton';
+import CustomInputText from '../components/TextInput';
+import Title from '../components/Title';
+import Subtitle from '../components/Subtitle';
+import ErrorMessage from '../components/ErrorMessage';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const SignUpScreen: React.FC = () => {
+
     const navigation = useNavigation<RoutePropType>();
     const [hidePassword, setHidePassword] = React.useState(true);
+    const [name, setName] = React.useState<string | null>(null);
+    const [email, setEmail] = React.useState<string | null>(null);
+    const [password, setPassword] = React.useState<string | null>(null);
+    const [isOk, setIsOk] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        if (name !== null && email !== null && password !== null) {
+            setIsOk(true)
+        } else {
+            setIsOk(false)
+        }
+    }, [name, email, password])
 
     return (
 
         <SafeAreaView style={styles.container}>
 
             <View style={styles.appContainer}>
-                <Text style={styles.title}>Sign up </Text>
-                <Text style={styles.title}>and jump right in</Text>
-                <Text style={styles.subtitle}>We are pretty sure you will use this thing to become better and better every day</Text>
+                <Title>Sign up</Title>
+                <Title>and jump right in</Title>
+                <Subtitle>We are pretty sure you will use this thing to become better and better every day</Subtitle>
 
-                <TextInput
-                    mode="outlined"
+                <CustomInputText
                     inputMode="text"
-                    style={styles.input}
-                    placeholder="Name"
-                    outlineStyle={styles.inputField}
+                    label="Name"
+                    required={true}
+                    setValue={setName}
                 />
 
-                <TextInput
-                    mode="outlined"
+                <CustomInputText
                     inputMode="email"
-                    style={styles.input}
-                    placeholder="Email"
-                    outlineStyle={styles.inputField}
+                    label="Email"
+                    required={true}
+                    setValue={setEmail}
                 />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    mode="outlined"
-                    outlineStyle={styles.inputField}
+                <CustomInputText
+                    inputMode='text'
+                    label="Password"
                     secureTextEntry={hidePassword}
                     right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
+                    required={true}
+                    setValue={setPassword}
                 />
 
-                <Button
+                <CustomButton
                     mode="contained"
-                    style={styles.button}
                     onPress={() => {
-                        navigation.navigate(Routes.Goals);
+                        if (isOk) {
+                            setErrorMessage(false)
+                            navigation.navigate(Routes.Goals);
+                        } else {
+                            setErrorMessage(true)
+                        }
                     }}
                 >
                     Register
-                </Button>
+                </CustomButton>
+
+                {errorMessage && (
+                    <ErrorMessage>
+                        Please complete all required filds (*)
+                    </ErrorMessage>
+                )}
 
             </View>
 
 
-            <Button mode="text" style={styles.button}>
+            <CustomButton
+                mode="text"
+                customStyles={styles.button}>
                 Got an account? Sign In!
-            </Button>
+            </CustomButton>
         </SafeAreaView>
     )
 
@@ -80,38 +110,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#EDF1F5",
     },
     button: {
-        marginVertical: 20,
-        width: '100%',
+        backgroundColor: "transparent",
     },
     appContainer: {
         padding: 24,
         width: '100%',
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 95,
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: "500",
-        textAlign: "center",
-    },
-    subtitle: {
-        textAlign: "center",
-        fontSize: 16,
-        fontWeight: "400",
-        marginTop: 8,
-        paddingLeft: 35,
-        paddingRight: 35,
-        marginBottom: 32,
-    },
-    input: {
-        width: '100%',
-        // marginVertical: 10,
-    },
-    inputField: {
-        borderRadius: 5,
-        // backgroundColor: Colors.inputBackground,
-        backgroundColor: "white",
-        borderWidth: 0,
+        flexGrow: 1,
     },
 })
