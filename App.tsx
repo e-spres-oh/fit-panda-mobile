@@ -9,6 +9,8 @@ import {
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import React from 'react';
 import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import GoalsScreen from './src/screens/GoalsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouteParams } from './src/routes/types';
@@ -46,6 +48,20 @@ export default function App() {
             <Stack.Screen
               name={Routes.Login}
               component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.SignUp}
+              component={SignUpScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Goals}
+              component={GoalsScreen}
               options={{
                 headerShown: false,
               }}
