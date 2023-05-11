@@ -8,6 +8,10 @@ import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import UserInfoScreen from './src/screens/UserInfoScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import ActivityLevelScreen from './src/screens/ActivityLevelScreen';
+import UserGoalsScreen from './src/screens/UserGoalsScreen';
+import CongratulationsScreen from './src/screens/CongratulationsScreen';
+import YourProfileScreen from './src/screens/YourProfileScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -55,6 +59,34 @@ export default function App() {
             <Stack.Screen
               name={Routes.UserInfo}
               component={UserInfoScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.ActivityLevel}
+              component={ActivityLevelScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.UserGoals}
+              component={UserGoalsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Congratulations}
+              component={CongratulationsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.YourProfile}
+              component={YourProfileScreen}
               options={{
                 headerShown: false,
               }}

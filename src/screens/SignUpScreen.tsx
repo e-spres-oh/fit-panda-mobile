@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import Subtitle from '../components/Subtitle';
@@ -15,6 +15,9 @@ type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 const SignUpScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
   const navigation = useNavigation<RoutePropType>();
+
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   return (
     <Screen>
@@ -31,6 +34,7 @@ const SignUpScreen: React.FC = () => {
             style={styles.input}
             placeholder="Name"
             outlineStyle={styles.inputField}
+            onSubmitEditing={() => emailInputRef.current?.focus()}
           />
           <TextInput
             mode="outlined"
@@ -38,6 +42,8 @@ const SignUpScreen: React.FC = () => {
             style={styles.input}
             placeholder="Email"
             outlineStyle={styles.inputField}
+            onSubmitEditing={() => passwordInputRef.current?.focus()}
+            ref={emailInputRef}
           />
           <TextInput
             style={styles.input}
@@ -45,7 +51,9 @@ const SignUpScreen: React.FC = () => {
             mode="outlined"
             outlineStyle={styles.inputField}
             secureTextEntry={hidePassword}
+            onSubmitEditing={() => navigation.navigate(Routes.UserInfo)}
             right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
+            ref={passwordInputRef}
           />
           <Button
             mode="contained"
