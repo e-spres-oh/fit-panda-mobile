@@ -1,23 +1,28 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Dimensions, View } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
-// import { Colors } from '../constants';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-// import { Routes } from '../routes/routes';
-// import { RouteProp, useRoute } from '@react-navigation/native';
-// import { RouteParams } from '../routes/types';
+import { StyleSheet, View } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
+import Title from '../components/Title';
+import Screen from '../components/layout/Screen';
+import { Colors } from '../constants';
+import { Routes } from '../routes/routes';
+import { RouteParams } from '../routes/types';
 
-// type RouteType = RouteProp<RouteParams, Routes.Login>;
+type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const LoginScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
-  //   const route = useRoute<RouteType>();
+  const navigation = useNavigation<RoutePropType>();
+
+  const onRegisterPress = () => {
+    navigation.navigate(Routes.SignUp);
+  };
 
   return (
-    // <KeyboardAwareScrollView style={styles.background}>
-    <SafeAreaView style={styles.container}>
+    <Screen>
       <View style={styles.mainButtonsContainer}>
-        <Text style={styles.logo}>Log in</Text>
+        <Title title="Log in" style={styles.title} />
         <TextInput
           mode="outlined"
           inputMode="email"
@@ -37,49 +42,32 @@ const LoginScreen: React.FC = () => {
           Login
         </Button>
       </View>
-      <Button mode="text" style={styles.button}>
-        Forgot password?
+      <Button mode="text" style={styles.button} onPress={onRegisterPress}>
+        No account? Sign up!
       </Button>
-    </SafeAreaView>
-    // </KeyboardAwareScrollView>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    // backgroundColor: Colors.background,
-  },
-  inputField: {
-    borderRadius: 5,
-    // backgroundColor: Colors.inputBackground,
-    borderWidth: 0,
-  },
+  title: { marginBottom: 20 },
   mainButtonsContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     flexGrow: 1,
   },
-  container: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: Dimensions.get('window').height,
-    width: '100%',
-    // backgroundColor: Colors.background,
+  inputField: {
+    borderRadius: 5,
+    backgroundColor: Colors.inputBackground,
+    borderWidth: 0,
   },
   input: {
-    width: '90%',
+    width: '100%',
     marginVertical: 10,
-  },
-  logo: {
-    fontSize: 30,
-    marginBottom: 20,
   },
   button: {
     marginVertical: 20,
-    width: '90%',
+    width: '100%',
   },
 });
 
