@@ -1,20 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import Title from '../components/Title';
 import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import Subtitle from '../components/Subtitle';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
-const LoginScreen: React.FC = () => {
+const CongratulationsScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
   const navigation = useNavigation<RoutePropType>();
-  const passwordInputRef = useRef<TextInput>(null);
 
   const onRegisterPress = () => {
     navigation.navigate(Routes.SignUp);
@@ -23,32 +23,28 @@ const LoginScreen: React.FC = () => {
   return (
     <Screen>
       <View style={styles.mainButtonsContainer}>
-        <Title title="Log in" style={styles.title} />
+        <Title title="Congratulations!" style={styles.title} />
+        <Subtitle
+          subtitle={'Your custom plan is ready and you’re one step closer to your goal weight'}
+          style={styles.subtitle}
+        ></Subtitle>
+        <Text style={styles.inputLabel}>How tall are you?</Text>
         <TextInput
           mode="outlined"
-          inputMode="email"
+          inputMode="numeric"
           style={styles.input}
-          placeholder="Email"
+          placeholder={'2600'}
           outlineStyle={styles.inputField}
-          onSubmitEditing={() => passwordInputRef.current?.focus()}
+          onSubmitEditing={() => navigation.navigate(Routes.YourProfile)}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          mode="outlined"
-          outlineStyle={styles.inputField}
-          secureTextEntry={hidePassword}
-          right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
-          onSubmitEditing={() => console.log('Ar trebui sa faca ceva login')}
-          ref={passwordInputRef}
-        />
-        <Button mode="contained" style={styles.button}>
-          Login
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => navigation.navigate(Routes.YourProfile)}
+        >
+          Start your journey!
         </Button>
       </View>
-      <Button mode="text" style={styles.button} onPress={onRegisterPress}>
-        No account? Sign up!
-      </Button>
     </Screen>
   );
 };
@@ -59,6 +55,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     flexGrow: 1,
+  },
+  inputLabel: {
+    fontSize: 15,
+    marginHorizontal: 50,
+    textAlign: 'center',
+    color: Colors.textLabel,
+  },
+  subtitle: {
+    marginTop: 10,
+    marginHorizontal: 40,
+    marginBottom: 50,
   },
   inputField: {
     borderRadius: 5,
@@ -75,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default CongratulationsScreen;

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 
@@ -15,7 +15,11 @@ type RoutePropType = StackNavigationProp<RouteParams, Routes.UserInfo>;
 
 const UserInfoScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('male');
+
+  const heightRef = useRef<TextInput>(null);
+  const weightRef = useRef<TextInput>(null);
+  const ageRef = useRef<TextInput>(null);
 
   return (
     <Screen>
@@ -66,6 +70,8 @@ const UserInfoScreen: React.FC = () => {
               style={styles.input}
               placeholder={'170 cm'}
               outlineStyle={styles.inputField}
+              onSubmitEditing={() => weightRef.current?.focus()}
+              ref={heightRef}
             />
             <Text style={styles.inputLabel}>How much do you weigh?</Text>
             <TextInput
@@ -74,6 +80,8 @@ const UserInfoScreen: React.FC = () => {
               style={styles.input}
               placeholder="80 kg"
               outlineStyle={styles.inputField}
+              onSubmitEditing={() => ageRef.current?.focus()}
+              ref={weightRef}
             />
             <Text style={styles.inputLabel}>How old are you?</Text>
             <TextInput
@@ -81,6 +89,8 @@ const UserInfoScreen: React.FC = () => {
               placeholder="40"
               mode="outlined"
               outlineStyle={styles.inputField}
+              onSubmitEditing={() => navigation.navigate(Routes.ActivityLevel)}
+              ref={ageRef}
             />
           </View>
 
@@ -88,7 +98,7 @@ const UserInfoScreen: React.FC = () => {
             mode="contained"
             style={styles.bottomButton}
             onPress={() => {
-              navigation.navigate(Routes.Welcome);
+              navigation.navigate(Routes.ActivityLevel);
             }}
           >
             Next
