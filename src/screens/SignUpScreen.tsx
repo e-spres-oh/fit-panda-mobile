@@ -12,9 +12,52 @@ import { RouteParams } from '../routes/types';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
+interface UserInfo {
+  email: string;
+  password: string;
+}
+
+const register = async (info: UserInfo) => {
+  const API= 'https://fit-panda.e-spres-oh.com/auth/register';
+  const request = JSON.stringify(info);
+  console.log("Request: " + request);
+  try {
+    const response = await fetch (API, 
+    { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: request
+    }
+    );
+    console.log("Response status: " + response.status);
+    if (response.ok==false) {
+      console.log('Register failed!');
+      return false;
+    }
+    else {
+      console.log("Register succeeded");
+      return true;
+    }
+
+  }
+  catch (error) {
+    console.log("error " + error);
+  }
+};
+
 const SignUpScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
   const navigation = useNavigation<RoutePropType>();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const RegisterNavigation = async () => {
+    const info: UserInfo = {email, password};
+    const success = await register(info);
+    if (success) {
+      navigation.navigate(Routes.UserInfo);
+    }
+  }
+  
 
   return (
     <Screen>
@@ -38,6 +81,7 @@ const SignUpScreen: React.FC = () => {
             style={styles.input}
             placeholder="Email"
             outlineStyle={styles.inputField}
+            onChangeText={(text) => setEmail(text)}
           />
           <TextInput
             style={styles.input}
@@ -46,11 +90,12 @@ const SignUpScreen: React.FC = () => {
             outlineStyle={styles.inputField}
             secureTextEntry={hidePassword}
             right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
+            onChangeText={(text) => setPassword(text)}
           />
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => navigation.navigate(Routes.UserInfo)}
+            onPress={RegisterNavigation}
           >
             Register
           </Button>

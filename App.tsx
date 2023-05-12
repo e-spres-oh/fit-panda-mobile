@@ -8,6 +8,10 @@ import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import UserInfoScreen from './src/screens/UserInfoScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import ActivityScreen from './src/screens/ActivityScreen';
+import GoalScreen from './src/screens/GoalScreen';
+import AllowanceScreen from './src/screens/AllowanceScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -55,6 +59,34 @@ export default function App() {
             <Stack.Screen
               name={Routes.UserInfo}
               component={UserInfoScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Activity}
+              component={ActivityScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Goal}
+              component={GoalScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Allowance}
+              component={AllowanceScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Home}
+              component={HomeScreen}
               options={{
                 headerShown: false,
               }}

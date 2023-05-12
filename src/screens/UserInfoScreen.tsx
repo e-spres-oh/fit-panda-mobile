@@ -88,7 +88,7 @@ const UserInfoScreen: React.FC = () => {
             mode="contained"
             style={styles.bottomButton}
             onPress={() => {
-              navigation.navigate(Routes.Welcome);
+              navigation.navigate(Routes.Activity);
             }}
           >
             Next
