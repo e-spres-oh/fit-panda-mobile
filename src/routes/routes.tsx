@@ -3,4 +3,7 @@ export enum Routes {
   Login = 'Log in',
   SignUp = 'Sign up',
   UserInfo = 'User info',
+  UserActivityLevel = 'User activity level',
+  UserGoal = 'User goal',
+  SignUpCongrats = 'Sign up congrats',
 }

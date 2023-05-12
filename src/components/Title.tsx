@@ -19,5 +19,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'center',
     color: Colors.title,
+    marginVertical: 20,
   },
 });

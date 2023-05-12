@@ -19,76 +19,69 @@ const UserInfoScreen: React.FC = () => {
 
   return (
     <Screen>
-      <ScrollView bounces={false}>
-        <View style={styles.scrollViewContainer}>
-          <View style={styles.titleContainer}>
-            <Title title={'Welcome!'} />
-            <Subtitle
-              subtitle={'Let’s customise Fit Pand for your Goals'}
-              style={styles.subtitle}
-            ></Subtitle>
-          </View>
-          <View style={styles.inputFieldsContainer}>
-            <Text style={styles.inputLabel}>
-              Please select witch sex we should use to calculate your calorie needs
-            </Text>
-            <SegmentedButtons
-              value={value}
-              onValueChange={setValue}
-              style={styles.selectable}
-              buttons={[
-                {
-                  value: 'male',
-                  label: 'Male',
-                  style: {
-                    backgroundColor:
-                      value === 'male' ? Colors.selectedButton : Colors.inputBackground,
-                    borderWidth: 0,
-                    justifyContent: 'center',
-                  },
+      <ScrollView contentContainerStyle={styles.scrollViewContainer} bounces={false}>
+        <Title title={'Welcome!'} />
+        <Subtitle subtitle={'Let’s customize Fit Panda for your Goals'} style={styles.subtitle} />
+        <View style={styles.inputFieldsContainer}>
+          <Text style={styles.inputLabel}>
+            Please select witch sex we should use to calculate your calorie needs
+          </Text>
+          <SegmentedButtons
+            value={value}
+            onValueChange={setValue}
+            style={styles.selectable}
+            buttons={[
+              {
+                value: 'male',
+                label: 'Male',
+                style: {
+                  backgroundColor:
+                    value === 'male' ? Colors.selectedButton : Colors.inputBackground,
+                  borderWidth: 0,
+                  justifyContent: 'center',
                 },
-                {
-                  value: 'female',
-                  label: 'Female',
-                  style: {
-                    backgroundColor:
-                      value === 'female' ? Colors.selectedButton : Colors.inputBackground,
-                    borderWidth: 0,
-                    justifyContent: 'center',
-                  },
+              },
+              {
+                value: 'female',
+                label: 'Female',
+                style: {
+                  backgroundColor:
+                    value === 'female' ? Colors.selectedButton : Colors.inputBackground,
+                  borderWidth: 0,
+                  justifyContent: 'center',
                 },
-              ]}
-            />
-            <Text style={styles.inputLabel}>How tall are you?</Text>
-            <TextInput
-              mode="outlined"
-              inputMode="text"
-              style={styles.input}
-              placeholder={'170 cm'}
-              outlineStyle={styles.inputField}
-            />
-            <Text style={styles.inputLabel}>How much do you weigh?</Text>
-            <TextInput
-              mode="outlined"
-              inputMode="email"
-              style={styles.input}
-              placeholder="80 kg"
-              outlineStyle={styles.inputField}
-            />
-            <Text style={styles.inputLabel}>How old are you?</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="40"
-              mode="outlined"
-              outlineStyle={styles.inputField}
-            />
-          </View>
+              },
+            ]}
+          />
+          <Text style={styles.inputLabel}>How tall are you?</Text>
+          <TextInput
+            mode="outlined"
+            inputMode="text"
+            style={styles.input}
+            placeholder={'170 cm'}
+            outlineStyle={styles.inputField}
+          />
+          <Text style={styles.inputLabel}>How much do you weigh?</Text>
+          <TextInput
+            mode="outlined"
+            inputMode="email"
+            style={styles.input}
+            placeholder="80 kg"
+            outlineStyle={styles.inputField}
+          />
+          <Text style={styles.inputLabel}>How old are you?</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="40"
+            mode="outlined"
+            outlineStyle={styles.inputField}
+          />
 
           <Button
             mode="contained"
-            style={styles.bottomButton}
+            style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.Welcome);
+              navigation.navigate(Routes.UserActivityLevel);
             }}
           >
             Next
@@ -109,9 +102,10 @@ const styles = StyleSheet.create({
   subtitle: {
     marginTop: 10,
     marginHorizontal: 70,
+    marginBottom: 30,
   },
   inputFieldsContainer: {
-    flex: 4,
+    flex: 3,
   },
   inputLabel: {
     fontSize: 15,
@@ -135,10 +129,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 5,
   },
-  bottomButton: {
-    bottom: 0,
-    width: '100%',
-    marginVertical: 20,
+  nextButton: {
+    marginTop: 40,
   },
 });
 
