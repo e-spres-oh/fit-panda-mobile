@@ -1,18 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
-import {
-  DefaultTheme,
-  MD3LightTheme,
-  MD3Theme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
-import WelcomeScreen from './src/screens/WelcomeScreen';
-import React from 'react';
-import LoginScreen from './src/screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RouteParams } from './src/routes/types';
+import React from 'react';
+import { DefaultTheme, MD3Theme, Provider as PaperProvider } from 'react-native-paper';
 import { Routes } from './src/routes/routes';
+import { RouteParams } from './src/routes/types';
+import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import UserInfoScreen from './src/screens/UserInfoScreen';
+import WelcomeScreen from './src/screens/WelcomeScreen';
+import UserActivity from './src/screens/UserActivity';
+import GoalsScreen from './src/screens/GoalScreen';
+import CongratulationsScreen from './src/screens/CongratulationsScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -46,6 +44,41 @@ export default function App() {
             <Stack.Screen
               name={Routes.Login}
               component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.SignUp}
+              component={SignUpScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.UserInfo}
+              component={UserInfoScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.UserActivity}
+              component={UserActivity}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.UserGoals}
+              component={GoalsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={Routes.Congratulations}
+              component={CongratulationsScreen}
               options={{
                 headerShown: false,
               }}
