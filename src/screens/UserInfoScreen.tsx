@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper';
-
+import { MyContext } from '../store/MyStore';
 import Subtitle from '../components/Subtitle';
 import Title from '../components/Title';
 import Screen from '../components/layout/Screen';
@@ -12,10 +12,22 @@ import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserInfo>;
+type UserInfoData = {
+  gender: string;
+  height: string;
+  weight: string;
+  age: string;
+};
 
 const UserInfoScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
-  const [value, setValue] = useState('');
+  const myStore = useContext(MyContext);
+  const [userInfoData, setUserInfoData] = useState<UserInfoData>({
+    gender: 'male',
+    height: '170',
+    weight: '80',
+    age: '40',
+  });
 
   return (
     <Screen>
@@ -24,11 +36,13 @@ const UserInfoScreen: React.FC = () => {
         <Subtitle subtitle={'Let’s customize Fit Panda for your Goals'} style={styles.subtitle} />
         <View style={styles.inputFieldsContainer}>
           <Text style={styles.inputLabel}>
-            Please select witch sex we should use to calculate your calorie needs
+            Please select which sex we should use to calculate your calorie needs
           </Text>
           <SegmentedButtons
-            value={value}
-            onValueChange={setValue}
+            value={userInfoData.gender}
+            onValueChange={(value: string) => {
+              setUserInfoData({ ...userInfoData, gender: value });
+            }}
             style={styles.selectable}
             buttons={[
               {
@@ -36,7 +50,7 @@ const UserInfoScreen: React.FC = () => {
                 label: 'Male',
                 style: {
                   backgroundColor:
-                    value === 'male' ? Colors.selectedButton : Colors.inputBackground,
+                    userInfoData.gender === 'male' ? Colors.selectedButton : Colors.inputBackground,
                   borderWidth: 0,
                   justifyContent: 'center',
                 },
@@ -46,7 +60,7 @@ const UserInfoScreen: React.FC = () => {
                 label: 'Female',
                 style: {
                   backgroundColor:
-                    value === 'female' ? Colors.selectedButton : Colors.inputBackground,
+                    userInfoData.gender === 'female' ? Colors.selectedButton : Colors.inputBackground,
                   borderWidth: 0,
                   justifyContent: 'center',
                 },
@@ -60,6 +74,8 @@ const UserInfoScreen: React.FC = () => {
             style={styles.input}
             placeholder={'170 cm'}
             outlineStyle={styles.inputField}
+            value={userInfoData.height}
+            onChangeText={(text) => setUserInfoData({ ...userInfoData, height: text })}
           />
           <Text style={styles.inputLabel}>How much do you weigh?</Text>
           <TextInput
@@ -68,6 +84,8 @@ const UserInfoScreen: React.FC = () => {
             style={styles.input}
             placeholder="80 kg"
             outlineStyle={styles.inputField}
+            value={userInfoData.weight}
+            onChangeText={(text) => setUserInfoData({ ...userInfoData, weight: text })}
           />
           <Text style={styles.inputLabel}>How old are you?</Text>
           <TextInput
@@ -75,12 +93,20 @@ const UserInfoScreen: React.FC = () => {
             placeholder="40"
             mode="outlined"
             outlineStyle={styles.inputField}
+            value={userInfoData.age}
+            onChangeText={(text) => setUserInfoData({ ...userInfoData, age: text })}
           />
 
           <Button
             mode="contained"
             style={styles.nextButton}
-            onPress={() => {
+            onPress={async () => {
+              const userProfile = await myStore.fetchUserProfile();
+              userProfile.sex = userInfoData.gender;
+              userProfile.age = parseInt(userInfoData.age);
+              userProfile.height = parseInt(userInfoData.height);
+              userProfile.weight = parseInt(userInfoData.weight);
+              await myStore.saveUserProfile(userProfile, myStore.userId);
               navigation.navigate(Routes.UserActivityLevel);
             }}
           >

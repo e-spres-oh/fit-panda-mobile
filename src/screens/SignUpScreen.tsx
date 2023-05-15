@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, Text } from 'react-native-paper';
 import Subtitle from '../components/Subtitle';
@@ -10,6 +10,8 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import { BASE_URL, endpoints } from '../endpoints';
+import { MyContext } from '../store/MyStore';
+import { Alert } from 'react-native/Libraries/Alert/Alert';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 type RegisterData = {
@@ -27,32 +29,12 @@ const SignUpScreen: React.FC = () => {
     email: '',
     password: '',
   });
+  const myStore = useContext(MyContext);
 
-  async function registerUser() {
-    if (errorMessage) {
-      setErrorMEssage('');
-    }
-
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: registerData.email, password: registerData.password }),
-    };
-
-    try {
-      const response = await fetch(`${BASE_URL}${endpoints.Register}`, requestOptions);
-      const result = await response.json();
-      if (response.ok) {
-        navigation.navigate(Routes.UserInfo);
-      } else {
-        console.log(JSON.stringify(result));
-        setErrorMEssage(result.message);
-      }
-    } catch (e: any) {
-      console.log(e);
-      setErrorMEssage(e.message);
-    }
-  }
+  const isValidEmail = (value: string) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(value);
+  };
 
   return (
     <Screen>
@@ -96,7 +78,19 @@ const SignUpScreen: React.FC = () => {
             {errorMessage}
           </Text>
         )}
-        <Button mode="contained" style={styles.button} onPress={async () => await registerUser()}>
+        <Button mode="contained" style={styles.button} 
+        onPress={async () => {
+          if (!isValidEmail(registerData.email) || !registerData.password) {
+            Alert.alert('Invalid email', 'Please enter a valid email address');
+            return;
+          }
+          await myStore.register(registerData.email, registerData.password);
+          const userProfile = await myStore.fetchUserProfile();
+          userProfile.name = registerData.name;
+          await myStore.saveUserProfile(userProfile, myStore.userId);
+          myStore.isLoggedIn = true;
+          navigation.navigate(Routes.UserInfo);
+        }}>
           Register
         </Button>
       </View>

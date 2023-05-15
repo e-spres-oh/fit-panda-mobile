@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import Title from '../components/Title';
@@ -8,15 +8,25 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { MyContext } from '../store/MyStore';
+import { Alert } from 'react-native/Libraries/Alert/Alert';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const LoginScreen: React.FC = () => {
   const [hidePassword, setHidePassword] = React.useState(true);
   const navigation = useNavigation<RoutePropType>();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const myStore = useContext(MyContext);
 
   const onRegisterPress = () => {
     navigation.navigate(Routes.SignUp);
+  };
+
+  const isValidEmail = (value: string) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(value);
   };
 
   return (
@@ -29,6 +39,7 @@ const LoginScreen: React.FC = () => {
           style={styles.input}
           placeholder="Email"
           outlineStyle={styles.inputField}
+          onChangeText={(text) => setUsername(text)}
         />
         <TextInput
           style={styles.input}
@@ -37,8 +48,17 @@ const LoginScreen: React.FC = () => {
           outlineStyle={styles.inputField}
           secureTextEntry={hidePassword}
           right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
+          onChangeText={(text) => setPassword(text)}
         />
-        <Button mode="contained" style={styles.button}>
+        <Button mode="contained" style={styles.button} 
+        onPress={async () => {
+          if (!isValidEmail(username) || !password) {
+            Alert.alert('Invalid email', 'Please enter a valid email address');
+            return;
+          }
+          await myStore.login(username, password);
+          navigation.navigate(Routes.Home);
+        }}>
           Login
         </Button>
       </View>
