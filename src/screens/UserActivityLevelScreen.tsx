@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-
+import { MyContext, UserProfile } from '../store/MyStore';
 import Title from '../components/Title';
 import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
@@ -22,6 +22,35 @@ enum ActivityLevel {
 const UserActivityLevelScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
   const [activityLevel, setActivityLevel] = useState(ActivityLevel.Low);
+  const myStore = useContext(MyContext);
+
+  const calculateTarget = (userProfile: UserProfile) => {
+    let bmr = 0;
+
+    if (userProfile.sex === 'male') {
+      bmr = 655 + (9.6 & userProfile.weight) + (1.8 * userProfile.height) - (4.7 * userProfile.age);
+    } else {
+      bmr = 66 + (13.7 & userProfile.weight) + (5 * userProfile.height) - (6.8 * userProfile.age);
+    }
+
+    userProfile.activity === 'low'
+      ? bmr *= 1.2 
+      : userProfile.activity ==='moderate'
+      ? bmr *= 1.375
+      : userProfile.activity === 'high'
+      ? bmr *= 1.55
+      : userProfile.activity ==='very_high'
+      ? bmr *= 1.725
+      : null;
+
+    userProfile.goal === 'lose'
+     ? bmr *= 0.8
+     : userProfile.goal === 'gain'
+     ? bmr += 300
+     : null;
+
+    return bmr;
+  };
 
   return (
     <Screen>
@@ -100,7 +129,11 @@ const UserActivityLevelScreen: React.FC = () => {
           <Button
             mode="contained"
             style={styles.nextButton}
-            onPress={() => {
+            onPress={async () => {
+              const userProfile = await myStore.fetchUserProfile();
+              userProfile.activity = activityLevel;
+              userProfile.target = calculateTarget(userProfile);
+              await myStore.saveUserProfile(userProfile, myStore.userId);
               navigation.navigate(Routes.UserGoal);
             }}
           >

@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-
+import { MyContext } from '../store/MyStore';
 import Title from '../components/Title';
 import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
@@ -21,6 +21,7 @@ enum Goals {
 const UserGoalScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
   const [goal, setUserGoal] = useState(Goals.LoseWeight);
+  const myStore = useContext(MyContext);
 
   return (
     <Screen>
@@ -76,7 +77,10 @@ const UserGoalScreen: React.FC = () => {
           <Button
             mode="contained"
             style={styles.nextButton}
-            onPress={() => {
+            onPress={async () => {
+              const userProfile = await myStore.fetchUserProfile();
+              userProfile.activity = goal;
+              await myStore.saveUserProfile(userProfile, myStore.userId);
               navigation.navigate(Routes.SignUpCongrats);
             }}
           >

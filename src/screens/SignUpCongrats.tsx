@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-
+import { MyContext } from '../store/MyStore';
 import Title from '../components/Title';
 import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
@@ -16,6 +16,17 @@ type RoutePropType = StackNavigationProp<RouteParams, Routes.SignUpCongrats>;
 const SignUpCongratsScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
   const [kcal, setKcal] = useState('2600');
+  const myStore = useContext(MyContext);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function fetchData() {
+        const userProfile = await myStore.fetchUserProfile();
+        setKcal(userProfile.target.toString());
+      }
+      fetchData();
+    }, [myStore])
+  );
 
   return (
     <Screen>
@@ -41,7 +52,8 @@ const SignUpCongratsScreen: React.FC = () => {
             mode="contained"
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.Welcome);
+              myStore.isLoggedIn = true;
+              navigation.navigate(Routes.Home);
             }}
           >
             Start your journey!
