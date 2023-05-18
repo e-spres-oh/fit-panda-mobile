@@ -7,11 +7,22 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const WelcomeScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
+  const myStore = React.useContext(MyContext);
+
+  React.useEffect(()=> {
+    //daca exista un token se incearca autentificarea cu acesta in homepage
+    if(myStore.token !== '') {
+      navigation.navigate(Routes.Homepage);
+    }
+  }, [])
+
+
   return (
     <Screen>
       <Image source={require('../../assets/logo.png')} style={styles.logo} resizeMode="contain" />

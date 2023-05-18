@@ -10,12 +10,28 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserInfo>;
+type RegisterData = {
+  gen: string;
+  height: string;
+  weight: string;
+  age: string;
+};
+
 
 const UserInfoScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
-  const [value, setValue] = useState('');
+  const [errorMessage, setErrorMEssage] = useState('');
+  const [registerData, setRegisterData] = useState<RegisterData>({
+    gen: 'M',
+    height: '',
+    weight: '',
+    age: '',
+  });
+
+  const myStore = React.useContext(MyContext);
 
   return (
     <Screen>
@@ -27,26 +43,26 @@ const UserInfoScreen: React.FC = () => {
             Please select witch sex we should use to calculate your calorie needs
           </Text>
           <SegmentedButtons
-            value={value}
-            onValueChange={setValue}
+            value={registerData.gen}
+            onValueChange={(text) => setRegisterData({ ...registerData, gen: text })}
             style={styles.selectable}
             buttons={[
               {
-                value: 'male',
+                value: 'M',
                 label: 'Male',
                 style: {
                   backgroundColor:
-                    value === 'male' ? Colors.selectedButton : Colors.inputBackground,
+                    registerData.gen === 'M' ? Colors.selectedButton : Colors.inputBackground,
                   borderWidth: 0,
                   justifyContent: 'center',
                 },
               },
               {
-                value: 'female',
+                value: 'F',
                 label: 'Female',
                 style: {
                   backgroundColor:
-                    value === 'female' ? Colors.selectedButton : Colors.inputBackground,
+                    registerData.gen === 'F' ? Colors.selectedButton : Colors.inputBackground,
                   borderWidth: 0,
                   justifyContent: 'center',
                 },
@@ -60,6 +76,8 @@ const UserInfoScreen: React.FC = () => {
             style={styles.input}
             placeholder={'170 cm'}
             outlineStyle={styles.inputField}
+            value={registerData.height}
+            onChangeText={(text) => setRegisterData({ ...registerData, height: text })}
           />
           <Text style={styles.inputLabel}>How much do you weigh?</Text>
           <TextInput
@@ -68,6 +86,8 @@ const UserInfoScreen: React.FC = () => {
             style={styles.input}
             placeholder="80 kg"
             outlineStyle={styles.inputField}
+            value={registerData.weight}
+            onChangeText={(text) => setRegisterData({ ...registerData, weight: text })}
           />
           <Text style={styles.inputLabel}>How old are you?</Text>
           <TextInput
@@ -75,14 +95,57 @@ const UserInfoScreen: React.FC = () => {
             placeholder="40"
             mode="outlined"
             outlineStyle={styles.inputField}
+            value={registerData.age}
+            onChangeText={(text) => setRegisterData({ ...registerData, age: text })}
           />
+
+          {errorMessage && (
+            <Text variant="labelLarge" style={styles.errorMessage}>
+              {errorMessage}
+            </Text>
+          )}
 
           <Button
             mode="contained"
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.UserActivityLevel);
-            }}
+              //save data in store
+              if (myStore.userProfile !== null) {
+
+                if (registerData.gen.trim() === '' ||
+                  Number(registerData.height) < 1 ||
+                  Number(registerData.weight) < 1 ||
+                  Number(registerData.age) < 1
+                ) {
+                  setErrorMEssage("Please fill with correct data!");
+                } else {
+
+                  // myStore.userProfile = {
+                  //   ...myStore.userProfile,
+                  //   sex: registerData.gen,
+                  //   height: Number(registerData.height),
+                  //   weight: Number(registerData.height),
+                  //   age: Number(registerData.age)
+                  // }
+                  myStore.userProfile.sex = registerData.gen;
+                  myStore.userProfile.height = Number(registerData.height);
+                  myStore.userProfile.weight = Number(registerData.weight);
+                  myStore.userProfile.age = Number(registerData.age);
+
+                  navigation.navigate(Routes.UserActivityLevel);
+                }
+              }
+              else {
+                // some error occurred
+
+                //deleting saved data (store)
+                myStore.reset();
+
+                //navigate to first Sign screen to
+                navigation.navigate(Routes.SignUp);
+              }
+            }
+            }
           >
             Next
           </Button>
@@ -131,6 +194,9 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     marginTop: 40,
+  },
+  errorMessage: {
+    color: Colors.error,
   },
 });
 

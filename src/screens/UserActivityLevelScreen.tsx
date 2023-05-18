@@ -9,19 +9,22 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserActivityLevel>;
 
 enum ActivityLevel {
-  Low = 'low',
-  Moderate = 'moderate',
-  High = 'high',
-  VeryHigh = 'very_high',
+  Low = 'LOW',
+  Moderate = 'MODERATE',
+  High = 'HIGH',
+  VeryHigh = 'VERI_HIGH',
 }
 
 const UserActivityLevelScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
   const [activityLevel, setActivityLevel] = useState(ActivityLevel.Low);
+
+  const myStore = React.useContext(MyContext);
 
   return (
     <Screen>
@@ -101,7 +104,24 @@ const UserActivityLevelScreen: React.FC = () => {
             mode="contained"
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.UserGoal);
+
+              if (myStore.userProfile !== null) {
+                // myStore.userProfile = { ...myStore.userProfile, activity: activityLevel };
+                
+                myStore.userProfile.activity = activityLevel;
+                navigation.navigate(Routes.UserGoal);
+              }
+              else {
+                // some error occurred
+
+                //deleting saved data (store)
+                myStore.reset();
+
+                //navigate to first Sign screen to
+                navigation.navigate(Routes.SignUp);
+              }
+
+
             }}
           >
             Next

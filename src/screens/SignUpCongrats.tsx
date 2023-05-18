@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 
@@ -10,12 +10,20 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import Subtitle from '../components/Subtitle';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.SignUpCongrats>;
 
 const SignUpCongratsScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
+  // pastram 2600 ca valoare de fallback
   const [kcal, setKcal] = useState('2600');
+  const [errorMessage, setErrorMEssage] = useState('');
+  const myStore = React.useContext(MyContext);
+
+  useEffect(() => {
+    setKcal(String(myStore.bmrCalculator()));
+  }, [])
 
   return (
     <Screen>
@@ -36,12 +44,40 @@ const SignUpCongratsScreen: React.FC = () => {
             outlineStyle={styles.inputField}
             keyboardType="numeric"
           />
-
+          {errorMessage && (
+            <Text variant="labelLarge" style={styles.errorMessage}>
+              {errorMessage}
+            </Text>
+          )}
           <Button
             mode="contained"
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.Welcome);
+
+              if (myStore.userProfile !== null) {
+                try {
+
+                  if (Number(kcal) > 100) {
+                    myStore.userProfile.target = Number(kcal);
+                    // console.log(myStore.userProfile, myStore.userId);
+                    myStore.saveUserProfile(myStore.userProfile, myStore.userId);
+                    navigation.navigate(Routes.Homepage);
+                  } else {
+                    setErrorMEssage("Please fill with correct data!");
+                  }
+                } catch (e) {
+                  console.log(e);
+                }
+              }
+              else {
+                // some error occurred
+
+                //deleting saved data (store)
+                myStore.reset();
+
+                //navigate to first Sign screen to
+                navigation.navigate(Routes.SignUp);
+              }
             }}
           >
             Start your journey!
@@ -89,6 +125,9 @@ const styles = StyleSheet.create({
   subtitle: {
     marginTop: 10,
     marginHorizontal: 50,
+  },
+  errorMessage: {
+    color: Colors.error,
   },
 });
 
