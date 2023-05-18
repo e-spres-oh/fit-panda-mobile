@@ -9,18 +9,21 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserGoal>;
 
 enum Goals {
-  LoseWeight = 'lose_weight',
-  MaintainWeight = 'maintain_weight',
-  GainWeight = 'gain_weight',
+  LoseWeight = 'LOSE_WEIGHT',
+  MaintainWeight = 'MAINTAIN_WEIGHT',
+  GainWeight = 'GAIN_WEIGHT',
 }
 
 const UserGoalScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
   const [goal, setUserGoal] = useState(Goals.LoseWeight);
+
+  const myStore = React.useContext(MyContext);
 
   return (
     <Screen>
@@ -77,7 +80,20 @@ const UserGoalScreen: React.FC = () => {
             mode="contained"
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate(Routes.SignUpCongrats);
+
+              if (myStore.userProfile !== null) {
+                myStore.userProfile.goal = goal;
+                navigation.navigate(Routes.SignUpCongrats);
+              }
+              else {
+                // some error occurred
+
+                //deleting saved data (store)
+                myStore.reset();
+
+                //navigate to first Sign screen to
+                navigation.navigate(Routes.SignUp);
+              }
             }}
           >
             Next

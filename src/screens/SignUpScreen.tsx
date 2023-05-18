@@ -10,6 +10,7 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import { BASE_URL, endpoints } from '../endpoints';
+import { MyContext } from "../store/myStore";
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 type RegisterData = {
@@ -28,6 +29,8 @@ const SignUpScreen: React.FC = () => {
     password: '',
   });
 
+  const myStore = React.useContext(MyContext);
+
   async function registerUser() {
     if (errorMessage) {
       setErrorMEssage('');
@@ -43,6 +46,22 @@ const SignUpScreen: React.FC = () => {
       const response = await fetch(`${BASE_URL}${endpoints.Register}`, requestOptions);
       const result = await response.json();
       if (response.ok) {
+        // save id, name and dummy data in store from result and make a login
+
+        myStore.userProfile = {
+          name: registerData.name,
+          sex: 'F',
+          height: 0,
+          weight: 0,
+          age: 0,
+          activity: 'LOW',
+          goal: "LOSE_WEIGHT",
+          target:0,
+          userId: 0
+        };
+
+        myStore.userId = result.id;
+        await myStore.login(registerData.email, registerData.password);
         navigation.navigate(Routes.UserInfo);
       } else {
         console.log(JSON.stringify(result));
