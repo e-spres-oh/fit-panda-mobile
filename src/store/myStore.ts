@@ -24,6 +24,7 @@ export interface IMyStore {
     login(email: string, password: string): void;
     logout(): void;
     reset(): void;
+    bmrCalculator(): number
 }
 
 export const defaultUserProfile: UserProfile = {
@@ -151,6 +152,48 @@ export class MyStore implements IMyStore {
             console.log(e);
             console.log("Failed to create Fit-Panda user");
         }
+    }
+
+
+    bmrCalculator = () => {
+        let bmr: number = 0;
+
+        if (this.userProfile?.sex === "M") {
+            bmr = 66 + (13.7 * this.userProfile.weight) + (5 * this.userProfile.height) - (6.8 * this.userProfile.age);
+        } else if (this.userProfile?.sex === "F") {
+            bmr = 655 + (9.6 * this.userProfile.weight) + (1.8 * this.userProfile.height) - (4.7 * this.userProfile.age);
+        } else {
+            bmr = -1;
+        }
+
+        if (bmr > 0) {
+            if (this.userProfile?.activity === "LOW") {
+                bmr = bmr * 1.2;
+            } else if (this.userProfile?.activity === "MODERATE") {
+                bmr = bmr * 1.375;
+            } else if (this.userProfile?.activity === "HIGH") {
+                bmr = bmr * 1.725;
+            } else if (this.userProfile?.activity === "VERY_HIGH") {
+                bmr = bmr * 1.9;
+            }
+
+            if (this.userProfile?.goal === "LOSE_WEIGHT") {
+                bmr = 0.8 * bmr;
+            } else if (this.userProfile?.goal === "GAIN_WEIGHT ") {
+                bmr = bmr + 300;
+            }
+
+
+            bmr = Math.round(bmr);
+
+            return bmr;
+
+        } else {
+            console.log("Error when calc BMR");
+            return -1
+        }
+
+        return 0;
     }
 
     logout() {

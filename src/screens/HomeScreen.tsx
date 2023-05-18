@@ -34,6 +34,7 @@ const HomeScreen: React.FC = () => {
     const getProfile = async () => {
         try {
             myStore.userProfile = await myStore.fetchUserProfile();
+            // console.log("USERPROFILEEEE:",myStore.userProfile);
             //pentru a randa datele
             setUserProfile(myStore.userProfile);
             if (myStore.userProfile.name === 'PLACEHOLDER' || myStore.userProfile.name === undefined) {
