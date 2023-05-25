@@ -5,4 +5,5 @@ export enum Colors {
   textLabel = '#666B77',
   selectedButton = '#D3E0F8',
   error = '#E9452F',
+  blueButtonMain = '#4189CA',
 }
