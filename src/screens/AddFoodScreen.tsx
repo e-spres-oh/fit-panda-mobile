@@ -33,9 +33,31 @@ const AddFoodScreen: React.FC = () => {
     })();
   }, []);
 
-  const onSavePressed = () => {
+  const onSavePressed = async () => {
+    const currentDate = new Date();
+
+    try {
+      const response = await fetch('${BASE_URL}${endpoints.Foods}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ foodName, kcal, currentDate }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data); 
+      } else {
+        console.error('Request failed: ', response.status);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    // post request cu food image dupa
+
     navigation.navigate(Routes.Home);
-    // put name, kcal, optionally the image on the server
   };
 
   const onAddImagePressed = async () => {
@@ -66,7 +88,7 @@ const AddFoodScreen: React.FC = () => {
           <Button onPress={() => takePicture()}>Take picture</Button>
         </View>
         )
-        : (//
+        : (
           <View style={styles.container}>
           <View style={styles.topRowContainer}>
             <IconButton icon="arrow-left" size={24} onPress={() => navigation.navigate(Routes.Home)}/>
@@ -113,7 +135,7 @@ const AddFoodScreen: React.FC = () => {
           </Button>
           </View>
         )
-      };
+      }
      
     </Screen>
   );

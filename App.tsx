@@ -39,7 +39,7 @@ export default function App() {
     <RootContext.Provider value={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName={Routes.Welcome}>
+          <Stack.Navigator initialRouteName={Routes.Home}>
             <Stack.Screen
               name={Routes.Welcome}
               component={WelcomeScreen}
