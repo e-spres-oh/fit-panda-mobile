@@ -8,6 +8,10 @@ export interface IStore {
   getToken(): string | null;
   getUserId(): number | undefined;
   getUser(): UserProfile;
+  getDate(): Date;
+  setDate(date: Date): void;
+  getTotalConsumed(): number;
+  setTotalConsumed(total: number): void;
 
   register(email: string, password: string): Promise<void>;
   login(email: string, password: string): Promise<void>;
@@ -18,6 +22,13 @@ export interface IStore {
   computeTDEE(): number;
   addFood(name: string, kcal: number, date: Date): Promise<number | undefined>;
   addFoodImage(foodId: number, photo: Photo): Promise<void>;
+  getFoodsByDate(consumedAt: Date): Promise<Food[]>
+}
+
+export interface Food {
+  photo?: Photo;
+  foodName: string;
+  kcal: number;
 }
 
 const activityMultiplier = {
@@ -40,8 +51,18 @@ export class RootStore implements IStore {
     target: 0,
     userId: 0,
   };
+  selectedDate: Date = new Date();
+  totalConsumed = 0;
 
   token: string = '';
+
+  getDate(): Date {
+    return this.selectedDate;
+  }
+
+  setDate(date: Date): void {
+    this.selectedDate = date;
+  }
 
   isAuthenticated(): boolean {
     return this.authenticated;
@@ -57,6 +78,14 @@ export class RootStore implements IStore {
 
   getUser(): UserProfile {
     return this.user;
+  }
+
+  getTotalConsumed(): number {
+    return this.totalConsumed;
+  }
+
+  setTotalConsumed(total: number): void {
+    this.totalConsumed = total;
   }
 
   updateStoredUser(data: Partial<UserProfile>): void {
@@ -173,6 +202,24 @@ export class RootStore implements IStore {
     } catch (e) {
       console.log(e);
       console.log('Failed to add photo');
+    }
+  }
+
+  async getFoodsByDate(consumedAt: Date): Promise<Food[]> {
+    try {
+      const response = await fetch(
+        `https://fit-panda.e-spres-oh.com/foods?consumedAt=${consumedAt.toISOString().substring(0, 10)}`,
+        createRequestOptions('GET', this.token)
+      );
+      if (!response.ok) {
+        throw new Error('Failed to get foods');
+      }
+      const result = await response.json();
+      return result as Food[];
+    } catch (e) {
+      console.log(e);
+      console.log('Failed to get foods');
+      return [];
     }
   }
 
