@@ -26,3 +26,18 @@ export type UserProfile = {
   userId: number;
   id?: number;
 };
+
+export type Food = {
+  id: number,
+  name: string,
+  kcal: number,
+  consumedAt: string,
+  photoId: number,
+  userId: number
+}[];
+
+export type Photo = {
+  uri: string;
+  name: string;
+  type: string;
+};

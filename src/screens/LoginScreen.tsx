@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import Title from '../components/Title';
@@ -8,16 +8,33 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
+import { IStore, RootContext } from '../stores/rootStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const LoginScreen: React.FC = () => {
+  const rootStore = React.useContext<IStore>(RootContext);
   const [hidePassword, setHidePassword] = React.useState(true);
   const navigation = useNavigation<RoutePropType>();
+  const [email, setEmail] = useState<string>();
+  const [pass, setPass] = useState<string>();
 
   const onRegisterPress = () => {
     navigation.navigate(Routes.SignUp);
   };
+
+  const onLoginPress = () => {
+    if (email !== undefined && pass !== undefined) {
+      try {
+        rootStore.login(email, pass);
+        navigation.navigate(Routes.Home);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      console.log("Empty data");
+    }
+  }
 
   return (
     <Screen>
@@ -29,6 +46,8 @@ const LoginScreen: React.FC = () => {
           style={styles.input}
           placeholder="Email"
           outlineStyle={styles.inputField}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           style={styles.input}
@@ -37,8 +56,10 @@ const LoginScreen: React.FC = () => {
           outlineStyle={styles.inputField}
           secureTextEntry={hidePassword}
           right={<TextInput.Icon icon="eye" onPress={() => setHidePassword(!hidePassword)} />}
+          value={pass}
+          onChangeText={(text) => setPass(text)}
         />
-        <Button mode="contained" style={styles.button}>
+        <Button mode="contained" style={styles.button} onPress={onLoginPress}>
           Login
         </Button>
       </View>

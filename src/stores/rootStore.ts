@@ -1,7 +1,8 @@
 import React from 'react';
 import { createRequestOptions } from '../utils/utils';
 import { BASE_URL, endpoints } from '../endpoints';
-import { UserActivityLevel, UserGoal, UserProfile } from '../types';
+import { UserActivityLevel, UserGoal, UserProfile, Food, Photo } from '../types';
+import { CameraCapturedPicture } from 'expo-camera/build/Camera.types';
 
 export interface IStore {
   isAuthenticated(): boolean;
@@ -14,6 +15,10 @@ export interface IStore {
   updateUser(user: UserProfile): Promise<void>;
   updateStoredUser(data: Partial<UserProfile>): void;
   getUserProfile(): Promise<void>;
+
+  getFoods(): Promise<void>;
+  postFood(name: string, kcal: number, photoId: number): Promise<void>;
+  addFoodImage(foodId: number, photo: Photo): Promise<void>;
 
   computeTDEE(): number;
 }
@@ -143,9 +148,65 @@ export class RootStore implements IStore {
     return this.user.goal === UserGoal.MaintainWeight
       ? this.computeBMR() * activityMultiplier[this.user.activity]
       : this.user.goal === UserGoal.LoseWeight
-      ? this.computeBMR() * activityMultiplier[this.user.activity] - 500
-      : this.computeBMR() * activityMultiplier[this.user.activity] + 300;
+        ? this.computeBMR() * activityMultiplier[this.user.activity] - 500
+        : this.computeBMR() * activityMultiplier[this.user.activity] + 300;
   };
+
+  async getFoods() {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Food}`,
+        createRequestOptions('GET', this.token)
+      );
+      if (response.status !== 201) {
+        console.log(response.status);
+        // throw new Error('Failed get food');
+      }
+      else {
+        const result = await response.json();
+        console.log("GETFoods", result);
+      }
+    } catch (e) {
+      console.log(e);
+      console.log("Failed to get foods");
+    }
+  };
+
+  async postFood(name: string, kcal: number, photoId: number) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Food}`,
+        createRequestOptions('POST', this.token, {
+          name, kcal, photoId
+        })
+      );
+      if (!response.ok) {
+        throw new Error('Failed to post food');
+      }
+      else {
+        console.log("POSTFoods", response.body);
+      }
+    } catch (e) {
+      console.log(e);
+      // console.log("Failed to post food");
+    }
+  };
+
+  async addFoodImage(foodId: number, photo: Photo): Promise<void> {
+    try {
+      const data = new FormData();
+      data.append('file', photo as any);
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Food}/${foodId}/photo`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${this.token}` },
+          body: data,
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 export const RootContext = React.createContext<IStore>(new RootStore());
