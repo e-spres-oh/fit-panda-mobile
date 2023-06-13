@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -10,25 +10,41 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import Subtitle from '../components/Subtitle';
-import { IStore, RootContext } from '../stores/rootStore';
+import { useUserStore } from '../hooks/useUserStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.SignUpCongrats>;
+type RouteParamsType = RouteProp<RouteParams, Routes.SignUpCongrats>;
 
 const SignUpCongratsScreen: React.FC = () => {
-  const rootStore = React.useContext<IStore>(RootContext);
   const navigation = useNavigation<RoutePropType>();
-  const [kcal, setKcal] = useState(Math.round(rootStore.computeTDEE()).toString());
+  const route = useRoute<RouteParamsType>();
+  const { name, sex, height, age, weight, activity, goal } = route?.params;
+  const { computeTDEE, updateUserProfile } = useUserStore();
+  const [kcal, setKcal] = useState(
+    Math.round(computeTDEE({ sex, height, age, weight, activity, goal })).toString()
+  );
 
   const onStartPressed = async () => {
-    try {
-      rootStore.updateStoredUser({ target: parseInt(kcal, 10) });
-      await rootStore.updateUser(rootStore.getUser());
+    const successful = await updateUserProfile({
+      name,
+      sex,
+      height,
+      age,
+      weight,
+      activity,
+      goal,
+      target: parseInt(kcal, 10),
+    });
+
+    if (successful) {
       navigation.navigate(Routes.Home);
-    } catch (e) {
-      console.log(e);
-      navigation.navigate(Routes.UserInfo);
+    } else {
+      console.log('Update was not successful');
+      navigation.navigate(Routes.UserInfo, { name });
     }
+    navigation.navigate(Routes.Home);
   };
+
   return (
     <Screen>
       <ScrollView contentContainerStyle={styles.scrollViewContainer} bounces={false}>

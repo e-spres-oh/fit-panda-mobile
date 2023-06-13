@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -11,13 +11,14 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import { UserProfile, UserSex } from '../types';
-import { IStore, RootContext } from '../stores/rootStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserInfo>;
+type RouteParamsType = RouteProp<RouteParams, Routes.UserInfo>;
 
 const UserInfoScreen: React.FC = () => {
-  const rootStore = React.useContext<IStore>(RootContext);
   const navigation = useNavigation<RoutePropType>();
+  const route = useRoute<RouteParamsType>();
+  const { name } = route?.params;
   const [userSex, setUserSex] = useState<UserSex>('male');
   const [userInfo, setUserInfo] = useState<Partial<UserProfile>>({
     height: 170,
@@ -26,13 +27,13 @@ const UserInfoScreen: React.FC = () => {
   });
 
   const onNextPressed = () => {
-    rootStore.updateStoredUser({
+    navigation.navigate(Routes.UserActivityLevel, {
+      name,
       sex: userSex,
-      height: userInfo.height,
-      age: userInfo.age,
-      weight: userInfo.weight,
+      height: userInfo.height!,
+      age: userInfo.age!,
+      weight: userInfo.weight!,
     });
-    navigation.navigate(Routes.UserActivityLevel);
   };
 
   return (

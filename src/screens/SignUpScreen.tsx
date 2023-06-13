@@ -9,7 +9,7 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
-import { IStore, RootContext } from '../stores/rootStore';
+import { useUserStore } from '../hooks/useUserStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 type RegisterData = {
@@ -19,7 +19,7 @@ type RegisterData = {
 };
 
 const SignUpScreen: React.FC = () => {
-  const rootStore = React.useContext<IStore>(RootContext);
+  const { register, login } = useUserStore();
   const [hidePassword, setHidePassword] = useState(true);
   const [errorMessage, setErrorMEssage] = useState('');
   const navigation = useNavigation<RoutePropType>();
@@ -35,10 +35,9 @@ const SignUpScreen: React.FC = () => {
     }
 
     try {
-      await rootStore.register(registerData.email, registerData.password);
-      await rootStore.login(registerData.email, registerData.password);
-      rootStore.updateStoredUser({ name: registerData.name });
-      navigation.navigate(Routes.UserInfo);
+      await register(registerData.email, registerData.password);
+      await login(registerData.email, registerData.password);
+      navigation.navigate(Routes.UserInfo, { name: registerData.name });
     } catch (e: any) {
       console.log(e);
       setErrorMEssage(e.message);

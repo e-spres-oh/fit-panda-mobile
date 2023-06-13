@@ -8,17 +8,17 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
-import { IStore, RootContext } from '../stores/rootStore';
+import { useUserStore } from '../hooks/useUserStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Welcome>;
 
 const LoginScreen: React.FC = () => {
-  const rootStore = React.useContext<IStore>(RootContext);
   const [hidePassword, setHidePassword] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigation = useNavigation<RoutePropType>();
   const [errorMessage, setErrorMessage] = React.useState('');
+  const { login } = useUserStore();
 
   const onRegisterPress = () => {
     navigation.navigate(Routes.SignUp);
@@ -26,8 +26,8 @@ const LoginScreen: React.FC = () => {
 
   const onLogin = async () => {
     try {
-      await rootStore.login(email, password);
-      if (rootStore.isAuthenticated()) {
+      const successful = await login(email, password);
+      if (successful) {
         navigation.navigate(Routes.Home);
       } else {
         setErrorMessage('Invalid credentials');

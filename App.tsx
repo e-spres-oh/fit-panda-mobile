@@ -11,9 +11,10 @@ import WelcomeScreen from './src/screens/WelcomeScreen';
 import UserActivityLevelScreen from './src/screens/UserActivityLevelScreen';
 import UserGoalScreen from './src/screens/UserGoal';
 import SignUpCongratsScreen from './src/screens/SignUpCongrats';
-import { IStore, RootContext, RootStore } from './src/stores/rootStore';
 import HomeScreen from './src/screens/HomeScreen';
 import AddFoodScreen from './src/screens/AddFoodScreen';
+import { UserStoreProvider } from './src/contexts/UserContext';
+import { FoodStoreProvider } from './src/contexts/FoodContext';
 
 const colors = {
   primary: '#5589f8',
@@ -34,70 +35,71 @@ const theme: MD3Theme = {
 const Stack = createStackNavigator<RouteParams>();
 
 export default function App() {
-  const [store] = React.useState<IStore>(new RootStore());
   return (
-    <RootContext.Provider value={store}>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={Routes.Welcome}>
-            <Stack.Screen
-              name={Routes.Welcome}
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name={Routes.Login}
-              component={LoginScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.SignUp}
-              component={SignUpScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.UserInfo}
-              component={UserInfoScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.UserActivityLevel}
-              component={UserActivityLevelScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.UserGoal}
-              component={UserGoalScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.SignUpCongrats}
-              component={SignUpCongratsScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={Routes.Home}
-              component={HomeScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name={Routes.AddFood} component={AddFoodScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </RootContext.Provider>
+    <PaperProvider theme={theme}>
+      <UserStoreProvider>
+        <FoodStoreProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={Routes.Welcome}>
+              <Stack.Screen
+                name={Routes.Welcome}
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={Routes.Login}
+                component={LoginScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.SignUp}
+                component={SignUpScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.UserInfo}
+                component={UserInfoScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.UserActivityLevel}
+                component={UserActivityLevelScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.UserGoal}
+                component={UserGoalScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.SignUpCongrats}
+                component={SignUpCongratsScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={Routes.Home}
+                component={HomeScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen name={Routes.AddFood} component={AddFoodScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </FoodStoreProvider>
+      </UserStoreProvider>
+    </PaperProvider>
   );
 }

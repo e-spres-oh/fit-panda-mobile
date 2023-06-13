@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -10,19 +10,26 @@ import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
 import { UserGoal } from '../types';
-import { IStore, RootContext } from '../stores/rootStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserGoal>;
+type RouteParamsType = RouteProp<RouteParams, Routes.UserGoal>;
 
 const UserGoalScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
+  const route = useRoute<RouteParamsType>();
+  const { name, sex, height, age, weight, activity } = route?.params;
   const [goal, setUserGoal] = useState(UserGoal.LoseWeight);
 
-  const rootStore = React.useContext<IStore>(RootContext);
-
-  const onNextPressed = () => {
-    navigation.navigate(Routes.SignUpCongrats);
-    rootStore.updateStoredUser({ goal });
+  const onNextPressed = async () => {
+    navigation.navigate(Routes.SignUpCongrats, {
+      name,
+      sex,
+      height,
+      age,
+      weight,
+      activity,
+      goal,
+    });
   };
 
   return (

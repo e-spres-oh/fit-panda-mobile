@@ -12,6 +12,14 @@ export type Photo = {
   name: string;
   type: string;
 };
+export type Food = {
+  id: number;
+  name: string;
+  kcal: number;
+  consumedAt: Date;
+  photoId: number;
+  userId: number;
+};
 
 export enum UserActivityLevel {
   Low = 'LOW',
