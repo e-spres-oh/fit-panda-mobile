@@ -1,8 +1,8 @@
 import React from 'react';
-import { Platform, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Colors } from '../constants';
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useFoodStore } from '../hooks/useFoodsStore';
 import { classifyDateRelativeToToday, getNextDay, getPrevDay } from '../utils/utils';
 
@@ -12,10 +12,9 @@ const DateRowComponent: React.FC = () => {
 
   const enableNextDayButton = selectedDate.getDate() < new Date().getDate();
 
-  const onChangeDate = (_: DateTimePickerEvent, date: Date | undefined) => {
-    const currentDate = date || new Date();
-    if (Platform.OS === 'android') setShowDatePicker(false);
-    selectDate(currentDate);
+  const handleConfirm = (date: Date) => {
+    setShowDatePicker(false);
+    selectDate(date);
   };
 
   return (
@@ -28,7 +27,11 @@ const DateRowComponent: React.FC = () => {
           iconColor={Colors.title}
           onPress={() => selectDate(getPrevDay(selectedDate))}
         />
-        <Text style={styles.actionButtonContent} onPress={() => setShowDatePicker(true)}>
+        <Text
+          style={styles.actionButtonContent}
+          onPress={() => setShowDatePicker(true)}
+          suppressHighlighting
+        >
           {classifyDateRelativeToToday(selectedDate)}
         </Text>
         <IconButton
@@ -50,15 +53,14 @@ const DateRowComponent: React.FC = () => {
         <Text style={styles.selectDateButton}>Select date</Text>
       </TouchableOpacity>
 
-      {showDatePicker && (
-        <RNDateTimePicker
-          display="spinner"
-          value={selectedDate}
-          onChange={onChangeDate}
-          mode="date"
-          maximumDate={new Date()}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={showDatePicker}
+        mode="date"
+        date={selectedDate}
+        maximumDate={new Date()}
+        onConfirm={handleConfirm}
+        onCancel={() => setShowDatePicker(false)}
+      />
     </View>
   );
 };

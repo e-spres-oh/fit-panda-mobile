@@ -46,6 +46,7 @@ const LoginScreen: React.FC = () => {
           inputMode="email"
           style={styles.input}
           placeholder="Email"
+          autoCapitalize="none"
           outlineStyle={styles.inputField}
           onChangeText={(text) => {
             setEmail(text);
