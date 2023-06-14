@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -9,20 +9,26 @@ import Screen from '../components/layout/Screen';
 import { Colors } from '../constants';
 import { Routes } from '../routes/routes';
 import { RouteParams } from '../routes/types';
-import { IStore, RootContext } from '../stores/rootStore';
 import { UserActivityLevel } from '../types';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.UserActivityLevel>;
+type RouteParamsType = RouteProp<RouteParams, Routes.UserActivityLevel>;
 
 const UserActivityLevelScreen: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
+  const route = useRoute<RouteParamsType>();
+  const { name, sex, height, age, weight } = route?.params;
   const [activityLevel, setActivityLevel] = useState(UserActivityLevel.Low);
 
-  const rootStore = React.useContext<IStore>(RootContext);
-
   const onNextPressed = () => {
-    rootStore.updateStoredUser({ activity: activityLevel });
-    navigation.navigate(Routes.UserGoal);
+    navigation.navigate(Routes.UserGoal, {
+      name,
+      sex,
+      height,
+      age,
+      weight,
+      activity: activityLevel,
+    });
   };
 
   return (

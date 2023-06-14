@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -15,17 +15,16 @@ import { RouteParams } from '../routes/types';
 import { Routes } from '../routes/routes';
 import { useNavigation } from '@react-navigation/native';
 import { Photo } from '../types';
-import Screen from '../components/layout/Screen';
 import CameraComponent from '../components/CameraComponent';
 import { CameraCapturedPicture } from 'expo-camera';
-import { IStore, RootContext } from '../stores/rootStore';
 import { useBackHardwareButtonAndGestureHandler } from '../hooks/useBackHardwareButtonAndGestureHandler';
 import { useBackSoftwareButton } from '../hooks/useBackSoftwareButton';
+import { useFoodStore } from '../hooks/useFoodsStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.AddFood>;
 
 const AddFoodScreen: React.FC = () => {
-  const rootStore = React.useContext<IStore>(RootContext);
+  const { addFood, addFoodImage } = useFoodStore();
   const [name, setName] = useState('');
   const [kcal, setKcal] = useState(0);
   const [image, setImage] = useState<CameraCapturedPicture | null>(null);
@@ -46,9 +45,9 @@ const AddFoodScreen: React.FC = () => {
 
   const onSubmit = async () => {
     try {
-      const foodId = await rootStore.addFood(name, kcal, new Date());
+      const foodId = await addFood(name, kcal);
       if (foodId && image) {
-        await rootStore.addFoodImage(foodId, { uri: image?.uri, name: '', type: '' } as Photo);
+        await addFoodImage(foodId, { uri: image?.uri, name: '', type: '' } as Photo);
       }
       navigation.goBack();
     } catch (error) {
