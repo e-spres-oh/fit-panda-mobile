@@ -74,6 +74,25 @@ export const useFoodStore = () => {
     }
   };
 
+  const deleteFood = async (foodId: number) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Foods}/${foodId}`,
+        createRequestOptions('DELETE', authToken!)
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete foods');
+      }
+
+      console.log(`Food with id ${foodId} was deleted!`)
+
+    } catch (e) {
+      console.log(e);
+      console.log('Failed to delete food');
+    }
+  }
+
   const totalConsumed = (): number => {
     return foods.reduce((sum, food) => sum + food.kcal, 0);
   };
@@ -81,6 +100,7 @@ export const useFoodStore = () => {
   return {
     foods,
     getFoods,
+    deleteFood,
     selectedDate,
     selectDate,
     totalConsumed,
