@@ -78,6 +78,44 @@ export const useFoodStore = () => {
     return foods.reduce((sum, food) => sum + food.kcal, 0);
   };
 
+  const deletePhoto = async (foodId: number) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Foods}/${foodId}/photo`,
+        createRequestOptions('DELETE', authToken!)
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete photo');
+      }
+      const result = await response.json();
+      return parseInt(result.id);
+    } catch (e) {
+      console.log(e);
+      console.log('Failed to delete photo');
+    }
+    return null;
+  };
+
+  const deleteFood = async (foodId: number) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Foods}/${foodId}`,
+        createRequestOptions('DELETE', authToken!)
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete food');
+      }
+      const result = await response.json();
+      return parseInt(result.id);
+    } catch (e) {
+      console.log(e);
+      console.log('Failed to delete food');
+    }
+    return null;
+  };
+
   return {
     foods,
     getFoods,
@@ -86,5 +124,7 @@ export const useFoodStore = () => {
     totalConsumed,
     addFood,
     addFoodImage,
+    deletePhoto,
+    deleteFood,
   };
 };
