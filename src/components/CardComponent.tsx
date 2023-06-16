@@ -38,10 +38,14 @@ const CardComponent: React.FC<CardProps> = ({ food, color, ScrollSetter }) => {
         }).start();
       }
       else {
-        Animated.spring(panX, {
-          toValue: 0,
-          useNativeDriver: true,
-        }).start();
+        if (gestureState.dx > 0) {
+          Animated.spring(panX, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        } else {
+          toggleBottomSheet();
+        }
       }
       ScrollSetter(false);
     },
@@ -63,30 +67,28 @@ const CardComponent: React.FC<CardProps> = ({ food, color, ScrollSetter }) => {
 
   return (
     <View style={[styles.card]}>
-      <TouchableWithoutFeedback
-        onPress={toggleBottomSheet}>
-        <Animated.View
-          style={[styles.swipeableItem, animatedStyles, { backgroundColor: color }]} {...panResponder.panHandlers}>
 
-          {food.photoId && (
-            <Image
-              source={{
-                uri: `${BASE_URL}${endpoints.Foods}/${food.id}/photo`,
-                method: 'GET',
-                headers: {
-                  Authorization: `Bearer ${authToken}`,
-                },
-              }}
-              style={styles.image}
-            />
-          )}
-          <View style={styles.textContainer}>
-            <Text style={styles.foodName}>{food.name}</Text>
-            <Text style={styles.kcal}>{food.kcal + ' kcal'}</Text>
-          </View>
+      <Animated.View
+        style={[styles.swipeableItem, animatedStyles, { backgroundColor: color }]} {...panResponder.panHandlers}>
 
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        {food.photoId && (
+          <Image
+            source={{
+              uri: `${BASE_URL}${endpoints.Foods}/${food.id}/photo`,
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }}
+            style={styles.image}
+          />
+        )}
+        <View style={styles.textContainer}>
+          <Text style={styles.foodName}>{food.name}</Text>
+          <Text style={styles.kcal}>{food.kcal + ' kcal'}</Text>
+        </View>
+
+      </Animated.View>
 
       {/* Delete button */}
 
