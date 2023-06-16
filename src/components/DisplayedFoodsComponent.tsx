@@ -11,6 +11,8 @@ const DisplayedFoodsComponent: React.FC = () => {
     <View style={styles.container}>
       <FlatList
         data={foods}
+        scrollEnabled={true}
+        bounces={true}
         ListEmptyComponent={() => <Text>No foods to display</Text>}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         ListFooterComponent={() => <View style={{ height: 10 }} />}

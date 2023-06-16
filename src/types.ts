@@ -1,4 +1,4 @@
-export type RequestMethod = 'GET' | 'POST' | 'PUT';
+export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export type UserSex = 'male' | 'female';
 
 export enum UserGoal {
