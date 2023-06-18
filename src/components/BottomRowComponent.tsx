@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Routes } from '../routes/routes';
@@ -6,11 +6,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteParams } from '../routes/types';
 import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants';
+import { useFoodStore } from '../hooks/useFoodsStore';
 
 type RoutePropType = StackNavigationProp<RouteParams, Routes.Home>;
 
 const BottomRowComponent: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
+  const { showBarCodeScanner, setShowBarCodeScanner } = useFoodStore();
+  
 
   return (
     <View style={styles.bottomRow}>
@@ -19,11 +22,11 @@ const BottomRowComponent: React.FC = () => {
             <Text style={styles.bottomActionButtonContent}>Add food</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.barcodeButton}]} onPress={() => {}}>
+          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.barcodeButton}]} onPress={() => setShowBarCodeScanner(true)}>
             <IconButton icon="barcode" size={20} iconColor='white' style={{marginHorizontal: 0}}/>
             <Text style={styles.bottomActionButtonContent}>Scan barcode</Text>
           </TouchableOpacity>
-        </View>
+    </View>
   );
 };
 

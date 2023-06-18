@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { FoodStoreContext } from '../contexts/FoodContext';
 import { BASE_URL, endpoints } from '../endpoints';
 import { createRequestOptions, objToQueryString } from '../utils/utils';
@@ -7,7 +7,7 @@ import { UserStoreContext } from '../contexts/UserContext';
 
 export const useFoodStore = () => {
   const { authToken } = useContext(UserStoreContext);
-  const { foods, setFoods, selectedDate, selectDate } = useContext(FoodStoreContext);
+  const { foods, setFoods, selectedDate, selectDate, showBarCodeScanner, setShowBarCodeScanner } = useContext(FoodStoreContext);
 
   const getFoods = async (): Promise<void> => {
     try {
@@ -126,5 +126,7 @@ export const useFoodStore = () => {
     addFoodImage,
     deletePhoto,
     deleteFood,
+    showBarCodeScanner,
+    setShowBarCodeScanner,
   };
 };
