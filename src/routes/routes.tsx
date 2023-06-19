@@ -8,4 +8,5 @@ export enum Routes {
   SignUpCongrats = 'Sign up congrats',
   Home = 'Home',
   AddFood = 'Add food',
+  CodeScanner = 'Bar Code Scanner',
 }

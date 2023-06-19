@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { FoodStoreContext } from '../contexts/FoodContext';
 import { BASE_URL, endpoints } from '../endpoints';
 import { createRequestOptions, objToQueryString } from '../utils/utils';
-import { Photo } from '../types';
+import { Food, Photo } from '../types';
 import { UserStoreContext } from '../contexts/UserContext';
 
 export const useFoodStore = () => {
@@ -29,6 +29,35 @@ export const useFoodStore = () => {
       setFoods([]);
     }
   };
+
+  const getFoodByBarCode = async (barcode: number): Promise<any> => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}${endpoints.Foods}/search/${barcode}`,
+        createRequestOptions('GET', authToken!)
+      );
+
+      if (!response.ok) {
+
+        throw new Error('Failed to get food');
+      }
+
+      const result = await response.json();
+
+      const scannedFood = {
+        name: result.products[0].product_name,
+        kcal: Number(result.products[0].nutriments["energy-kcal_value_computed"]),
+      }
+
+      return scannedFood;
+
+      // setFoods(result);
+    } catch (e) {
+      console.log(e);
+      console.log('Failed to get food');
+      setFoods([]);
+    }
+  }
 
   const addFood = async (name: string, kcal: number): Promise<number | null> => {
     try {
@@ -59,9 +88,9 @@ export const useFoodStore = () => {
       if (!photo.name) photo.name = 'Photo' + Date.now() + '.jpeg';
       if (!photo.type) photo.type = 'image/jpeg';
       data.append('file', photo as any);
-      const response = await fetch(`${BASE_URL}${endpoints.Foods}/${foodId}/photo`, {
+      const response = await fetch(`${BASE_URL}${endpoints.Foods} /${foodId}/photo`, {
         method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${authToken}` },
+        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${authToken} ` },
         body: data,
       });
       if (!response.ok) {
@@ -81,7 +110,7 @@ export const useFoodStore = () => {
   const deletePhoto = async (foodId: number) => {
     try {
       const response = await fetch(
-        `${BASE_URL}${endpoints.Foods}/${foodId}/photo`,
+        `${BASE_URL}${endpoints.Foods} /${foodId}/photo`,
         createRequestOptions('DELETE', authToken!)
       );
 
@@ -126,5 +155,6 @@ export const useFoodStore = () => {
     addFoodImage,
     deletePhoto,
     deleteFood,
+    getFoodByBarCode,
   };
 };

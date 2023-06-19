@@ -13,6 +13,7 @@ import UserGoalScreen from './src/screens/UserGoal';
 import SignUpCongratsScreen from './src/screens/SignUpCongrats';
 import HomeScreen from './src/screens/HomeScreen';
 import AddFoodScreen from './src/screens/AddFoodScreen';
+import CodeScanner from './src/screens/BarCodScannerScreen';
 import { UserStoreProvider } from './src/contexts/UserContext';
 import { FoodStoreProvider } from './src/contexts/FoodContext';
 
@@ -96,6 +97,7 @@ export default function App() {
                 }}
               />
               <Stack.Screen name={Routes.AddFood} component={AddFoodScreen} />
+              <Stack.Screen name={Routes.CodeScanner} component={CodeScanner} />
             </Stack.Navigator>
           </NavigationContainer>
         </FoodStoreProvider>
