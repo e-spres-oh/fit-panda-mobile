@@ -5,6 +5,7 @@ export type RouteParams = {
   [Routes.Welcome]: undefined;
   [Routes.Login]: undefined;
   [Routes.SignUp]: undefined;
+  [Routes.CodeScanner]: undefined;
   [Routes.UserInfo]: {
     name: string;
   };

@@ -19,7 +19,7 @@ const BottomRowComponent: React.FC = () => {
             <Text style={styles.bottomActionButtonContent}>Add food</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.barcodeButton}]} onPress={() => {}}>
+          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.barcodeButton}]} onPress={() => {navigation.navigate(Routes.CodeScanner)}}>
             <IconButton icon="barcode" size={20} iconColor='white' style={{marginHorizontal: 0}}/>
             <Text style={styles.bottomActionButtonContent}>Scan barcode</Text>
           </TouchableOpacity>
