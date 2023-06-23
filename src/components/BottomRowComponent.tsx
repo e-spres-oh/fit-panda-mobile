@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text, IconButton } from 'react-native-paper';
+import { Text, IconButton, Button, FAB } from 'react-native-paper';
 import { Routes } from '../routes/routes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteParams } from '../routes/types';
@@ -13,34 +13,22 @@ const BottomRowComponent: React.FC = () => {
   const navigation = useNavigation<RoutePropType>();
 
   return (
-    <View style={styles.bottomRow}>
-      <TouchableOpacity
-        style={[styles.bottomActionButton, { backgroundColor: Colors.blueButtonMain }]}
-        onPress={() => navigation.navigate(Routes.AddFoodBarcode)}
-      >
-        <IconButton icon="pizza" size={20} iconColor="white" style={{ marginHorizontal: 0 }} />
-        <Text style={styles.bottomActionButtonContent}>Add food</Text>
-      </TouchableOpacity>
-    </View>
+    <FAB
+      icon="plus"
+      style={styles.button}
+      color="white"
+      onPress={() => navigation.navigate(Routes.AddFoodBarcode)}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  bottomActionButton: {
-    width: '47%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    borderRadius: 10,
-  },
-  bottomActionButtonContent: {
-    color: 'white',
-    fontSize: 16,
-    marginRight: 10,
+  button: {
+    position: 'absolute',
+    bottom: 0,
+    right: 16,
+    backgroundColor: Colors.blueButtonMain,
+    borderRadius: 50,
   },
 });
 

@@ -19,9 +19,10 @@ import { useFoodStore } from '../hooks/useFoodsStore';
 interface CardProps {
   food: Food;
   color: string;
+  parentScrolling: boolean;
 }
 
-const CardComponent: React.FC<CardProps> = ({ food, color }) => {
+const CardComponent: React.FC<CardProps> = ({ food, color, parentScrolling }) => {
   const { authToken } = useUserStore();
   const { deleteFood, deletePhoto, getFoods } = useFoodStore();
 
@@ -30,7 +31,10 @@ const CardComponent: React.FC<CardProps> = ({ food, color }) => {
 
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return true;
+      },
+      onShouldBlockNativeResponder: () => false,
       onPanResponderMove: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
         pan.setValue(gestureState.dx + oldPan.current);
       },

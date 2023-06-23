@@ -37,28 +37,29 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        <TopRowHome onLogout={onLogout} />
-        <DateRowHome />
-        <TargetFoodComponent />
-        <Text style={styles.textFoods}>Foods for today</Text>
-        <View style={styles.displayedFoods}>
-          <DisplayedFoodsComponent />
-        </View>
-        <BottomRowHome />
+    <Screen style={styles.container}>
+      {/* <View style={styles.container}> */}
+      <TopRowHome onLogout={onLogout} />
+      <DateRowHome />
+      <TargetFoodComponent />
+      <Text style={styles.textFoods}>Foods for today</Text>
+      <View style={styles.displayedFoods}>
+        <DisplayedFoodsComponent />
       </View>
+      <BottomRowHome />
+      {/* </View> */}
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     justifyContent: 'center',
+    flexDirection: 'column',
   },
   displayedFoods: {
     height: '50%',
+    flexGrow: 1,
   },
   textFoods: {
     fontSize: 20,
