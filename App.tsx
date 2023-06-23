@@ -15,6 +15,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import AddFoodScreen from './src/screens/AddFoodScreen';
 import { UserStoreProvider } from './src/contexts/UserContext';
 import { FoodStoreProvider } from './src/contexts/FoodContext';
+import AddFoodBarcodeScreen from './src/screens/AddFoodBarcodeScreen';
 
 const colors = {
   primary: '#5589f8',
@@ -96,6 +97,7 @@ export default function App() {
                 }}
               />
               <Stack.Screen name={Routes.AddFood} component={AddFoodScreen} />
+              <Stack.Screen name={Routes.AddFoodBarcode} component={AddFoodBarcodeScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </FoodStoreProvider>

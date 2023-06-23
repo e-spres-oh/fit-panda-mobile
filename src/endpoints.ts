@@ -5,4 +5,5 @@ export const endpoints = {
   Login: 'auth/login',
   Profile: 'profile',
   Foods: 'foods',
+  FoodSearch: 'foods/search',
 };

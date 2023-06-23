@@ -9,11 +9,17 @@ import TargetFoodComponent from '../components/TargetFoodComponent';
 import DisplayedFoodsComponent from '../components/DisplayedFoodsComponent';
 import { useUserStore } from '../hooks/useUserStore';
 import { useFoodStore } from '../hooks/useFoodsStore';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteParams } from '../routes/types';
+import { Routes } from '../routes/routes';
+
+type RoutePropType = StackNavigationProp<RouteParams, Routes.Home>;
 
 const HomeScreen: React.FC = () => {
-  const { getUserProfile } = useUserStore();
+  const { getUserProfile, logout } = useUserStore();
   const { selectedDate, getFoods } = useFoodStore();
+  const navigation = useNavigation<RoutePropType>();
 
   useEffect(() => {
     getUserProfile().catch((e) => console.log(e));
@@ -25,10 +31,15 @@ const HomeScreen: React.FC = () => {
     }, [selectedDate])
   );
 
+  const onLogout = () => {
+    logout();
+    navigation.navigate(Routes.Welcome);
+  };
+
   return (
     <Screen>
       <View style={styles.container}>
-        <TopRowHome />
+        <TopRowHome onLogout={onLogout} />
         <DateRowHome />
         <TargetFoodComponent />
         <Text style={styles.textFoods}>Foods for today</Text>

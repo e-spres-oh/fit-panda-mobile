@@ -33,6 +33,10 @@ export const useUserStore = () => {
     return false;
   };
 
+  const logout = () => {
+    setAuthToken(null);
+  };
+
   const register = async (email: string, password: string) => {
     try {
       const response = await fetch(
@@ -42,8 +46,6 @@ export const useUserStore = () => {
 
       const result = await response.json();
       if (response.ok) {
-        // setUser({ email: email, id: result.id });
-        // this.updateStoredUser({ userId: result.id });
       } else {
         throw new Error(result.message);
       }
@@ -110,6 +112,7 @@ export const useUserStore = () => {
     user,
     authToken,
     login,
+    logout,
     register,
     getUserProfile,
     updateUserProfile,

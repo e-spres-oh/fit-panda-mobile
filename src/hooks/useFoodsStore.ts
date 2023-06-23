@@ -9,6 +9,45 @@ export const useFoodStore = () => {
   const { authToken } = useContext(UserStoreContext);
   const { foods, setFoods, selectedDate, selectDate } = useContext(FoodStoreContext);
 
+  const getInfoFromProduct = (product: any) => {};
+
+  const getInfoFromBarCode = async (code: string) => {
+    console.log(`Getting food info from barcode ${code}`);
+    const response = await fetch(
+      `${BASE_URL}${endpoints.FoodSearch}/${code}`,
+      createRequestOptions('GET', authToken!)
+    );
+    if (!response.ok) {
+      console.log(`Failed to get food info from barcode ${code}`);
+      return null;
+    }
+    const responseJson = await response.json();
+    console.log(`Got food info from barcode ${code} `);
+    if (responseJson.count === 0) return null;
+    const data = responseJson.products;
+    const product = data
+      .filter(
+        (product: any) =>
+          product.hasOwnProperty('product_name') &&
+          product.hasOwnProperty('nutriments') &&
+          (product.nutriments.hasOwnProperty('energy-kcal_serving') ||
+            product.nutriments.hasOwnProperty('energy-kcal'))
+      )
+      .pop();
+
+    if (product === undefined) return null;
+
+    console.log(JSON.stringify(product, null, 2));
+
+    const imageUrl = product.image_front_url ?? null;
+
+    return {
+      name: product.product_name,
+      kcal: product.nutriments['energy-kcal_serving'] ?? product.nutriments['energy-kcal'],
+      imageUrl,
+    };
+  };
+
   const getFoods = async (): Promise<void> => {
     try {
       const response = await fetch(
@@ -119,6 +158,7 @@ export const useFoodStore = () => {
   return {
     foods,
     getFoods,
+    getInfoFromBarCode,
     selectedDate,
     selectDate,
     totalConsumed,

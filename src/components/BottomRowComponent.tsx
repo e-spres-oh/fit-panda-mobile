@@ -14,23 +14,21 @@ const BottomRowComponent: React.FC = () => {
 
   return (
     <View style={styles.bottomRow}>
-          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.blueButtonMain}]} onPress={() => navigation.navigate(Routes.AddFood)}>
-            <IconButton icon="pizza" size={20} iconColor='white' style={{marginHorizontal: 0}}/>
-            <Text style={styles.bottomActionButtonContent}>Add food</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={[styles.bottomActionButton, {backgroundColor: Colors.barcodeButton}]} onPress={() => {}}>
-            <IconButton icon="barcode" size={20} iconColor='white' style={{marginHorizontal: 0}}/>
-            <Text style={styles.bottomActionButtonContent}>Scan barcode</Text>
-          </TouchableOpacity>
-        </View>
+      <TouchableOpacity
+        style={[styles.bottomActionButton, { backgroundColor: Colors.blueButtonMain }]}
+        onPress={() => navigation.navigate(Routes.AddFoodBarcode)}
+      >
+        <IconButton icon="pizza" size={20} iconColor="white" style={{ marginHorizontal: 0 }} />
+        <Text style={styles.bottomActionButtonContent}>Add food</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   bottomRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   bottomActionButton: {
     width: '47%',
@@ -43,7 +41,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginRight: 10,
-  }
+  },
 });
 
 export default BottomRowComponent;

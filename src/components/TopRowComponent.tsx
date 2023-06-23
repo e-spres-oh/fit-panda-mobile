@@ -1,20 +1,17 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, IconButton } from 'react-native-paper';
+import { Text, IconButton, Button } from 'react-native-paper';
 import { useUserStore } from '../hooks/useUserStore';
 
-const TopRowComponent: React.FC = () => {
+const TopRowComponent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const { user } = useUserStore();
 
   return (
     <View style={styles.topRow}>
       <Text style={styles.greetingText}>{`Salut, ${user?.name}`}</Text>
-      <IconButton
-        icon="dots-vertical"
-        size={20}
-        style={{ marginHorizontal: 0 }}
-        onPress={() => {}}
-      />
+      <Button style={{ marginHorizontal: 0 }} onPress={onLogout}>
+        Logout
+      </Button>
     </View>
   );
 };

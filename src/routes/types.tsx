@@ -34,4 +34,5 @@ export type RouteParams = {
   };
   [Routes.Home]: undefined;
   [Routes.AddFood]: undefined;
+  [Routes.AddFoodBarcode]: undefined;
 };
